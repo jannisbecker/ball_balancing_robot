@@ -8,7 +8,8 @@
 #include "gyro.h"
 
 /* Gyro Object constructor
- * 	dt: Delta Time, describes how frequent the IMU retrieves data,
+ * Params:
+ * 	dt: 	Delta Time, describes how frequent the IMU retrieves data,
  * 		and is also needed for the complementary filter
  */
 Gyro::Gyro(double dt) {
@@ -18,6 +19,8 @@ Gyro::Gyro(double dt) {
 /* Additional init method
  * Initializes the Gyro unit via a library call, thus changing registers
  * in the IMU to set the neccessary settings.
+ * Returns:	True is returned when the init was successful, false, if not.
+ *		This usually happens when the IMU isn't connected correctly, or not at all.		
  */
 bool Gyro::init() {
 	Wire.begin();
@@ -30,10 +33,17 @@ bool Gyro::init() {
 	return true;
 }
 
-/* Read new values, transform them and save them in *xAngle and *yAngle 
- * Also subtract the calibration values to zero out these new values 
+/* Main update call
+ * Read new values, transform them and save them in *xAngle and *yAngle 
+ * Also subtract the calibration values to zero out these new values
+ * Params:
+ * 	*xAngle:	Must point to the variable where the calculated and calibrated rotation around the x-Axis
+ *			should be saved in.
+ * 	*yAngle:	Must point to the variable where the calculated and calibrated rotation around the y-Axis
+ *			should be saved in.
  */
 void Gyro::update(double *xAngle, double *yAngle) { 
+	/* Read raw data and apply the complementary filter */
 	read();
 	complementaryFilter();
 
@@ -46,8 +56,7 @@ void Gyro::update(double *xAngle, double *yAngle) {
 
 }
 
-
-/* Retrieve new, raw data from the gyro */
+/* Method for reading new data into the buffers */
 void Gyro::read() {
 	imu.read();
 
@@ -66,7 +75,9 @@ void Gyro::read() {
  * Read http://www.pieter-jan.com/node/11 for more info
  */
 void Gyro::complementaryFilter() {
-	 double pitchAcc, rollAcc;               
+
+    /* Temporary buffers for aceeleration values */
+    double pitchAcc, rollAcc;               
  
     /* Integration of gyro data (degrees per second) over time (seconds) = angle (degrees) 
      * Pitch is a rotation around the x-axis, roll rotates around the y-axis.
@@ -78,11 +89,11 @@ void Gyro::complementaryFilter() {
     int force = abs(accData[0]) + abs(accData[1]) + abs(accData[2]);
     if (force > 8192 && force < 32768) {
 		
-		/* Complementary filter on pitch (x-axis rotation) */
+	/* Complementary filter on pitch (x-axis rotation) */
         pitchAcc = atan2(accData[1], accData[2]) * 180 / PI;
         pitch = pitch * 0.98 + pitchAcc * 0.02;
  
-		/* Complementary filter on roll (y-axis rotation) */
+	/* Complementary filter on roll (y-axis rotation) */
         rollAcc = atan2(accData[0], accData[2]) * 180 / PI;
         roll = roll * 0.98 + rollAcc * 0.02;
     }
@@ -98,7 +109,7 @@ void Gyro::calibrate() {
 	long pitchSum = 0, rollSum = 0;
 	/* Number of readings (equals 2 seconds / dt) */
 	int iterations = (int)(2000/deltaTime);
-	/* Number of burn in readings */
+	/* Number of burn in readings (300 readings take 3 seconds in a 10ms dt interval) */
 	int burninIterations = 300;
 
 
