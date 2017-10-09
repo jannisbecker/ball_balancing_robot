@@ -24,7 +24,7 @@
 	  	double deltaTime;
 	  	double pitch, roll;
 	  	int gyroData[3] = {0,0,0}, accData[3] = {0,0,0};
-	  	int zeroPitch = 0, zeroRoll = 0;
+	  	double zeroPitch = 0, zeroRoll = 0;
 
 	  	void Gyro::read();
 		void Gyro::complementaryFilter();

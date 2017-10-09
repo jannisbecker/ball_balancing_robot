@@ -52,8 +52,7 @@ void Gyro::update(double *xAngle, double *yAngle) {
 	 * should point towards the first quadrant in the 2D coordinate space
 	 */
 	*xAngle = pitch - zeroPitch;
-	*yAngle = -roll + zeroRoll;
-
+	*yAngle = roll - zeroRoll;
 }
 
 /* Method for reading new data into the buffers */
@@ -106,12 +105,11 @@ void Gyro::complementaryFilter() {
 void Gyro::calibrate() {
 
 	/* Buffers for sum calculation */
-	long pitchSum = 0, rollSum = 0;
+	double pitchSum = 0, rollSum = 0;
 	/* Number of readings (equals 2 seconds / dt) */
 	int iterations = (int)(2000/deltaTime);
 	/* Number of burn in readings (300 readings take 3 seconds in a 10ms dt interval) */
 	int burninIterations = 300;
-
 
 	/* Take readings, burn in the filter for a while and then start to sum them up */
 	for(int i = 0; i < iterations + burninIterations; i++) {
@@ -130,9 +128,11 @@ void Gyro::calibrate() {
 		delay(deltaTime - (millis()-lastMillis));
 	}
 
+ 
+
 	/* Divide the sums by number of iterations to get an average */
-	zeroPitch = (pitchSum / iterations);
-	zeroRoll = (rollSum / iterations);
+	zeroPitch = (pitchSum / (double)iterations);
+	zeroRoll = (rollSum / (double)iterations);
 
 	calibrated = true;
 }

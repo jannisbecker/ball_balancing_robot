@@ -26,14 +26,6 @@
  */
 void OmniMotorDriver::drive(double inputX, double inputY) { 
 	float forceAngle = calcAngle(inputX, inputY);
-	
-	
-	//Serial.print("FORCE ANGLE: ");
-	//Serial.print(" ");
-	//Serial.println(forceAngle);
-	
-	
-	
 
 	/* Calculates the relative speed distribution on all three wheels */
 	calcDistribution(forceAngle);
@@ -49,13 +41,13 @@ void OmniMotorDriver::drive(double inputX, double inputY) {
 		driveSingle(motor, wheelSpeeds[motor]);
 	}
 
-	/* Print some values for debugging purposes. Viewable in the Arduino IDE Serial plotter */
+	/* Print some values for debugging purposes. Viewable in the Arduino IDE Serial plotter 
 	Serial.print(" ");
 	Serial.print(wheelSpeeds[0]);
 	Serial.print(" ");
 	Serial.print(wheelSpeeds[1]);
 	Serial.print(" ");
-	Serial.println(wheelSpeeds[2]);
+	Serial.println(wheelSpeeds[2]);*/
 	
 }
 

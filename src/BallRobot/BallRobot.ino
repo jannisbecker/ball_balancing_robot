@@ -13,7 +13,7 @@ OmniMotorDriver omd;
 /* Deadzone definition. With a rotation of less than this value,
  * the robot will stand still
  */
-double deadzone = 3.0;
+double deadzone = 1.5;
 
 /* Buffers for timing, gyro data and PID outputs */
 long lastMillis;
@@ -62,12 +62,13 @@ void loop() {
 	Serial.print(xAngle);
 	Serial.print(" ");
 	Serial.print(yAngle);
-	Serial.print(" ");
-	
-	/* Also plot PID outputs */  
-	Serial.print(xOut);
-	Serial.print(" ");
-	Serial.print(yOut);
+	Serial.print(" "); 
+
+  /* Plot Angle on Serial Plotter */
+  Serial.print(xOut);
+  Serial.print(" ");
+  Serial.print(yOut);
+  Serial.println(" "); 
 
 	/* If any calculated angle is larger than the deadzone */
 	if(abs(xAngle) > deadzone || abs(yAngle) > deadzone) {
@@ -85,7 +86,7 @@ void loop() {
 	 * This is needed for gyro and PID accuracy
 	 */
 	int pTime = millis() - lastMillis;
-	int resttime = (dt > pTime)? (dt - pTime) : (pTime % dt);
+	int resttime = (dt > pTime)? (dt - pTime) : 0;
 	delay(resttime);
 }
 
