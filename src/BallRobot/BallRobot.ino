@@ -58,17 +58,16 @@ void loop() {
 	/* Compute PID Output with the data */
 	pid.compute(xAngle, yAngle, &xOut, &yOut);
 
-	/* Plot Angle on Serial Plotter */
+	/* Plot Angle on Serial Plotter 
 	Serial.print(xAngle);
 	Serial.print(" ");
 	Serial.print(yAngle);
-	Serial.print(" "); 
+	Serial.println(" "); */
 
-  /* Plot Angle on Serial Plotter */
+  /* Plot Angle on Serial Plotter 
   Serial.print(xOut);
   Serial.print(" ");
-  Serial.print(yOut);
-  Serial.println(" "); 
+  Serial.println(yOut); */
 
 	/* If any calculated angle is larger than the deadzone */
 	if(abs(xAngle) > deadzone || abs(yAngle) > deadzone) {

@@ -2,15 +2,6 @@
 
 #include "motor.h"
 
-#define M1_PWM 1
-#define M1_DIR 2
-
-#define M2_PWM 3
-#define M2_DIR 4
-
-#define M3_PWM 5
-#define M3_DIR 6
-
 
 /* Drive all three motors, given the info of where (x,y) to go
  * This method calculates the angle difference between the
@@ -42,7 +33,6 @@ void OmniMotorDriver::drive(double inputX, double inputY) {
 	}
 
 	/* Print some values for debugging purposes. Viewable in the Arduino IDE Serial plotter 
-	Serial.print(" ");
 	Serial.print(wheelSpeeds[0]);
 	Serial.print(" ");
 	Serial.print(wheelSpeeds[1]);

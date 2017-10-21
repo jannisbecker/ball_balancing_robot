@@ -52,7 +52,7 @@ void Gyro::update(double *xAngle, double *yAngle) {
 	 * should point towards the first quadrant in the 2D coordinate space
 	 */
 	*xAngle = pitch - zeroPitch;
-	*yAngle = roll - zeroRoll;
+	*yAngle = -roll + zeroRoll;
 }
 
 /* Method for reading new data into the buffers */
